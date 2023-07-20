@@ -1,0 +1,2 @@
+sys-process/htop  lm-sensors hwloc delayacct
+sys-process/lsof  rpc  -examples  -selinux

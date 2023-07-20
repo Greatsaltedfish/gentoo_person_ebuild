@@ -1,0 +1,2 @@
+kde-apps/dolphin  activities -handbook -semantic-desktop
+kde-apps/okular epub djvu  mobi  qml pdf speech  markdown -crypt
