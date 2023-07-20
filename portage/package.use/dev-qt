@@ -1,0 +1,5 @@
+dev-qt/qtprintsupport cups
+dev-qt/qtgui  jpeg wayland vnc egl X -vulkan
+dev-qt/qtwidgets  X dbus
+dev-qt/qtcore icu
+dev-qt/qtmultimedia qml
