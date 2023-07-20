@@ -1,5 +1,0 @@
-app-text/xmlto text
-app-text/ghostscript-gpl cups
-app-text/poppler nss qt5 tiff
-app-text/djvu jpeg tiff xml 
-app-text/discount minimal
