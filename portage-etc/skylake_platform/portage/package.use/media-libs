@@ -1,0 +1,6 @@
+media-libs/mesa vaapi  wayland lm-sensors
+media-libs/libva X wayland
+media-libs/libpulse X
+media-libs/libglvnd X
+media-libs/libvpx postproc
+media-libs/alsa-lib alisp

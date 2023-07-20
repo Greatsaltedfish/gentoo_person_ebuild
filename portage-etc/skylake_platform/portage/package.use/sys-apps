@@ -1,0 +1,8 @@
+sys-apps/hwloc  udev
+sys-apps/dbus X elogind  -systemd
+sys-apps/busybox syslog
+sys-apps/kmod lzma zlib
+sys-apps/mlocate -selinux nls
+sys-apps/xdg-desktop-portal screencast
+sys-apps/openrc  netifrc
+sys-apps/iproute2 -iptables bpf elf

@@ -1,0 +1,2 @@
+media-video/vlc ogg mtp wayland vaapi x264 x265 udev
+media-video/ffmpeg vaapi x264 x265  fontconfig

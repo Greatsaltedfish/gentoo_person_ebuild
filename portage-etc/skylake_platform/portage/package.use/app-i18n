@@ -1,0 +1,4 @@
+app-i18n/fcitx X wayland
+app-i18n/fcitx-configtool config-qt kcm
+app-i18n/fcitx-gtk wayland gtk4 gtk3
+app-i18n/fcitx-qt qt5

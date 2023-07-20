@@ -1,0 +1,1 @@
+sys-devel/gcc lto doc fortran nls nptl openmp default-stack-clash-protection sanitize ssp pgo

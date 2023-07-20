@@ -1,0 +1,5 @@
+>=app-i18n/fcitx-5.0.23 ~amd64
+>=app-i18n/fcitx-chinese-addons-5.0.17 ~amd64
+>=app-i18n/libime-1.0.14:5 ~amd64
+>=app-i18n/fcitx-qt-5.0.17-r1 ~amd64
+>=app-i18n/fcitx-configtool-5.0.17 ~amd64

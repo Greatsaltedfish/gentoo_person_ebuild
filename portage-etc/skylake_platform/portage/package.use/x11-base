@@ -1,0 +1,2 @@
+x11-base/xorg-server   wayland xorg ipv6 udev elogind doc -suid xvfb
+

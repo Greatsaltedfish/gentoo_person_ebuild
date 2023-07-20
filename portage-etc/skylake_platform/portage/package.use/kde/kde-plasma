@@ -1,0 +1,3 @@
+kde-plasma/plasma-meta -legacy-systray -kwallet -networkmanager -browser-integration -crypt -grub sddm pulseaudio
+kde-plasma/ksysguard lm-sensors
+kde-plasma/kwin lock
