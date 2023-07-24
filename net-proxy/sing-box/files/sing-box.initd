@@ -1,0 +1,52 @@
+#!/sbin/openrc-run
+# Copyright 1999-2021 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+depend() {
+     need net
+}
+checkconfig() {
+        if [ "${RC_SVCNAME}" != "sing-box" ]; then
+                # If you want to boot with a non-default configuration file, soft-link sing-box.initd (ln -s sing-box.initd sing-box.your_config)
+                SING_CFGNAME="${RC_SVCNAME#*.}."
+        fi
+        DEFAULT_CFGNAME='config.'
+        SING_CONFIG="/etc/sing-box/${SING_CFGNAME-$DEFAULT_CFGNAME}json"
+        SING_PIDFILE="/run/sing-box.${SING_CFGNAME}pid" 
+
+        if [ ! -f ${SING_CONFIG} ]; then
+                  ewarn "${SING_CONFIG} does not exist,"
+                  return 1
+        fi
+        SING_LOG=$(jq .log.output ${SING_CONFIG}|sed -E 's/"//g' || return 1)
+        if [ ! -f $SING_LOG ]; then
+                  ewarn "${SING_LOG} does not exist."
+                  return 1
+        fi
+
+        if [ ! -d /var/lib/sing-box ]; then
+                  ewarn "/var/lib/sing-box directory not exist."
+                  return 1
+        fi
+
+        return 0
+}
+
+start() {
+        checkconfig || return 1
+
+        ebegin "Starting Sing-box"
+        ebegin "Log FIle : ${SING_LOG}"
+
+        start-stop-daemon --start \
+        -b -1 ${SING_LOG} -2 ${SING_LOG} \
+        --make-pidfile -p ${SING_PIDFILE}  \
+        --exec /usr/bin/sing-box  -- -D /var/lib/sing-box -c ${SING_CONFIG} run
+        eend $?
+}
+
+stop() {
+        checkconfig || return 1
+        ebegin "Stopping Sing-box"
+        start-stop-daemon --stop -p ${SING_PIDFILE}
+        eend $?
+}

@@ -11,10 +11,13 @@ SRC_URI="https://github.com/SagerNet/sing-box/archive/refs/tags/v${PV}.tar.gz ->
          https://github.com/Greatsaltedfish/gentoo-go-deps/releases/download/${P}/${P}-deps.tar.xz" 
 DEPEND=">=dev-lang/go-1.20.4"
 RDEPEND="${DEPEND}
-        systemd? (
-            acct-group/sing-box
-            acct-user/sing-box
-        )
+         systemd? (
+             acct-group/sing-box
+             acct-user/sing-box
+         )
+		openrc? (
+               app-misc/jq
+		)
 "
 LICENSE="GPL-3"
 SLOT="0"
@@ -22,7 +25,7 @@ KEYWORDS=" ~amd64"
 S="${WORKDIR}"
 RESTRICT="mirror"
 
-IUSE="+quic +grpc reality_server acme clash_api v2ray_api +gvisor tor lwip dhcp wireguard shadowsocksr ech +utls  systemd"
+IUSE="+quic +grpc reality_server acme clash_api v2ray_api +gvisor tor lwip dhcp wireguard shadowsocksr ech +utls  systemd openrc"
 REQUIRED_USE="quic? ( || ( ech utls ) )"
 
 src_compile() {
@@ -77,7 +80,7 @@ src_compile() {
              C_TAGS+="with_utls,"
    fi
                 
-	C_TAGS=$(echo "${C_TAGS}"|sed -E "s/,$//g") ||die 
+	C_TAGS=$(echo "${C_TAGS}"|sed -E "s/,$//g" || die)  
     ego build \
         -v \
         -trimpath \
@@ -100,7 +103,11 @@ src_install() {
       systemd_dounit  "${FILESDIR}/sing-box.service" 
       systemd_dounit  "${FILESDIR}/sing-box@.service"
       fi
-      
+    
+	 if use openrc; then
+      newinitd "${FILESDIR}/sing-box.initd" sing-box
+      fi
+
       keepdir /etc/sing-box
 
 }

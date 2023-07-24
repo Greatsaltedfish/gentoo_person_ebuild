@@ -18,7 +18,7 @@
 			  <flag name="reality_server"> support  reality server  </flag>
 			  <flag name="v2ray_api"> support v2ray api  </flag>
 			  <flag name="utls"> build utls module form sing-box </flag>
-			  <flag name="systemd"> Adding users and groups to the sing-box programme </flag>
+			  <flag name="openrc"> Add openrc initd script (depend app-misc/jq) </flag>
 		</use>
 <maintainer type="person">
 <email></email>

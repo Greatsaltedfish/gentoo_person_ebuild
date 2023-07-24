@@ -15,6 +15,9 @@ RDEPEND="${DEPEND}
             acct-group/sing-box
             acct-user/sing-box
         )
+		openrc? (
+             app-misc/jq
+		)
 "
 LICENSE="GPL-3"
 SLOT="0"
@@ -22,7 +25,7 @@ KEYWORDS=" ~amd64"
 S="${WORKDIR}"
 RESTRICT="mirror"
 
-IUSE="+quic +grpc reality_server acme clash_api v2ray_api +gvisor tor lwip dhcp wireguard shadowsocksr ech +utls  systemd"
+IUSE="+quic +grpc reality_server acme clash_api v2ray_api +gvisor tor lwip dhcp wireguard shadowsocksr ech +utls  systemd openrc"
 REQUIRED_USE="quic? ( || ( ech utls ) )"
 
 
@@ -87,7 +90,8 @@ src_compile() {
              C_TAGS+="with_utls,"
    fi
                 
-	C_TAGS=$(echo "${C_TAGS}"|sed -E "s/,$//g") ||die 
+   ##	C_TAGS=$(echo "${C_TAGS}"|sed -E "s/,$//g" || die)  
+      C_TAGS=${C_TAGS%,} || die
 	export SING_VERSION=$(ego run ./cmd/internal/read_tag)
     ego build \
         -v \
@@ -113,6 +117,10 @@ src_install() {
       systemd_dounit  "${FILESDIR}/sing-box@.service"
       fi
       
+	  if use openrc; then
+	     newinitd "${FILESDIR}/sing-box.initd" sing-box
+	  fi	 
+
       keepdir /etc/sing-box
 
 }
