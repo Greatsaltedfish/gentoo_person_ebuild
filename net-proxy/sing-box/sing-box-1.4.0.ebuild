@@ -3,43 +3,33 @@
 
 EAPI=8
 
-inherit go-module systemd git-r3
+inherit go-module systemd
 
 DESCRIPTION="sing-box,The universal proxy platform."
 HOMEPAGE="https://github.com/SagerNet/sing-box"
-EGIT_REPO_URI="https://github.com/SagerNet/sing-box.git"
-EGIT_BRANCH="dev-next"
+SRC_URI="https://ghproxy.com/https://github.com/SagerNet/sing-box/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz  
+         https://ghproxy.com/https://github.com/Greatsaltedfish/gentoo-go-deps/releases/download/${P}/${P}-deps.tar.xz" 
 DEPEND=">=dev-lang/go-1.20.4"
 RDEPEND="${DEPEND}
-        systemd? (
-            acct-group/sing-box
-            acct-user/sing-box
-        )
+         systemd? (
+             acct-group/sing-box
+             acct-user/sing-box
+         )
 		openrc? (
-             app-misc/jq
+               app-misc/jq
 		)
 "
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=" ~amd64"
-S="${WORKDIR}"
+S="${WORKDIR}/${P}"
 RESTRICT="mirror"
 
 IUSE="+quic +grpc reality_server acme clash_api v2ray_api +gvisor tor lwip dhcp wireguard shadowsocksr ech +utls  systemd openrc"
 REQUIRED_USE="quic? ( || ( ech utls ) )"
 
-
-src_unpack() {
-	 git-r3_src_unpack
-     cd ${P} || die
-	 export GOPROXY=https://goproxy.cn
-	 ego mod vendor || die
-
-}
-
 src_compile() {
-##   cd ${PN} || die 
-   cd ${P} || die
+##   cd ${P} || die 
    local C_TAGS
    if use lwip || use tor; then
              export CGO_CPPFLAGS="$CPPFLAGS"
@@ -90,9 +80,7 @@ src_compile() {
              C_TAGS+="with_utls,"
    fi
                 
-   ##	C_TAGS=$(echo "${C_TAGS}"|sed -E "s/,$//g" || die)  
-      C_TAGS=${C_TAGS%,} || die
-	export SING_VERSION=$(ego run ./cmd/internal/read_tag)
+	C_TAGS=$(echo "${C_TAGS}"|sed -E "s/,$//g" || die)  
     ego build \
         -v \
         -trimpath \
@@ -100,26 +88,25 @@ src_compile() {
         -mod=readonly \
         -modcacherw \
         -tags "$C_TAGS" \
-        -ldflags " 
-        -X \"github.com/sagernet/sing-box/constant.Version=$SING_VERSION \" 
-        -s -w -buildid= -linkmode=external" \
+        -ldflags "
+            -X \"github.com/sagernet/sing-box/constant.Version=${PV} \"
+            -s -w -buildid= -linkmode=external" \
         ./cmd/sing-box   
 
 }
 
 src_install() {
-##      cd ${PN} || die 
-   cd ${P} || die
+##      cd ${P} || die 
       dobin sing-box
       
       if use systemd; then
       systemd_dounit  "${FILESDIR}/sing-box.service" 
       systemd_dounit  "${FILESDIR}/sing-box@.service"
       fi
-      
-	  if use openrc; then
-	     newinitd "${FILESDIR}/sing-box.initd" sing-box
-	  fi	 
+    
+	 if use openrc; then
+      newinitd "${FILESDIR}/sing-box.initd" sing-box
+      fi
 
       keepdir /etc/sing-box
 

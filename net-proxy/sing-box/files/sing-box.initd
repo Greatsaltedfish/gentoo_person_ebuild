@@ -1,6 +1,7 @@
 #!/sbin/openrc-run
 # Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+extra_commands="checkconfig restart"
 depend() {
      need net
 }
@@ -49,4 +50,12 @@ stop() {
         ebegin "Stopping Sing-box"
         start-stop-daemon --stop -p ${SING_PIDFILE}
         eend $?
+}
+
+restart() {
+         checkconfig || return 1
+	 stop || return 1
+	 start || return 1
+	 eend $?
+
 }
