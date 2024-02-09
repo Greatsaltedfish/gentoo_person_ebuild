@@ -48,7 +48,7 @@ src_compile() {
              export CGO_LDFLAGS="$LDFLAGS" 
    fi
    if use quic; then
-             C_TAGS="with_quic,"
+             C_TAGS+="with_quic,"
    fi
    if use grpc; then
              C_TAGS+="with_grpc,"
