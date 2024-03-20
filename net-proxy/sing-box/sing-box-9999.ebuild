@@ -91,7 +91,8 @@ src_compile() {
    fi
                 
    ##	C_TAGS=$(echo "${C_TAGS}"|sed -E "s/,$//g" || die)  
-      C_TAGS=${C_TAGS%,} || die
+      C_TAGS=${C_TAGS%,} 
+       [[  -v ${C_TAGS} ]] || die
 	export SING_VERSION=$(ego run ./cmd/internal/read_tag)
    test -n "$SING_VERSION" || die
     ego build \
